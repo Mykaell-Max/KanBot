@@ -27,10 +27,16 @@ def advanced_embed(title: str, message: str):
 
 
 def task_embed(task):
+    statusColor = {
+        "Pending": discord.Color.yellow(),
+        "In progress": discord.Color.blue(),
+        "Done": discord.Color.green(),
+    }
+
     coolTask = discord.Embed(
         title=f"**__{task['name']}__**",
         description=f"{task['description']}",
-        color=discord.Color.light_embed()
+        color=statusColor.get(task['status'])
     )
 
     coolTask.add_field(name="Responsible", value=task['responsible'], inline=True)
