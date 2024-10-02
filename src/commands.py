@@ -5,14 +5,14 @@ from utils import truncate_name
 def setup_commands(bot):
     
     @bot.command(name='add')
-    async def add_task_command(ctx, taskname: str = None, description: str = None, responsible: str = None):
+    async def add_task_command(ctx, taskname: str = None, description: str = None, responsible: str = ""):
 
-        if taskname is None or description is None or responsible is None:
+        if taskname is None or description is None:
             await ctx.send(embed=error_embed('All the fields must be filled!'))
             return
 
         try:
-            add_task(taskname.strip().capitalize(), description.strip().capitalize(), responsible.strip().capitalize())
+            add_task(taskname.strip().capitalize(), description.strip().capitalize(), responsible.strip())
 
             await ctx.send(embed=simple_embed("Task added!"))
 
@@ -61,17 +61,18 @@ def setup_commands(bot):
                 await ctx.send(embed=error_embed('No tasks avaliable!'))
                 return
             
-            task_list = "```"
-            task_list += f"{'Task Name':<30} {'Status':<15}\n"
-            task_list += "-" * 45 + "\n"
+            task_list = "```md\n"
+            task_list += f"{'Task Name':<30} | {'Status':<11} | {'Responsible':<16}\n"
+            task_list += "-" * 64 + "\n"
 
-            for name, status in tasks:
-                truncated_name = truncate_name(name)
-                task_list += f"{truncated_name:<30} {status:<15}\n"
-            
+            for name, status, responsible in tasks:
+                truncated_name = truncate_name(name, 30)
+                task_list += f"{truncated_name:<30} | {status:<11} | {responsible:<16}\n"
+        
             task_list += "```"
 
-            await ctx.send(embed=advanced_embed('Tasklist', task_list))
+            # await ctx.send(embed=advanced_embed('Tasklist', task_list))
+            await ctx.send(task_list)
 
         except Exception as error:
             await ctx.send(embed=error_embed(str(error)))
