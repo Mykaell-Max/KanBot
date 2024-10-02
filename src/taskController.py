@@ -32,7 +32,7 @@ def delete_task(taskname):
 
 
 def view_all_tasks():
-    return [(task['name'], task['status']) for task in tasks.find()]
+    return [(task['name'], task['status'], task['responsible']) for task in tasks.find()]
 
 
 def view_one_task(taskname):
