@@ -3,6 +3,7 @@ import os
 from discord.ext import commands
 from dotenv import load_dotenv
 from commands import setup_commands
+from keepAlive import keep_alive
 
 intents = discord.Intents.all()
 intents.members = True
@@ -14,14 +15,16 @@ KanBot = commands.Bot(command_prefix='k!', intents=intents)
 
 setup_commands(KanBot)
 
+
 @KanBot.event
 async def on_ready():
     channel = KanBot.get_channel(1290297651614449769)
-    online = discord.Embed(
-        title='KanBot ONLINE',
-        color=discord.Color.light_embed(),
-        description=f'{KanBot.user} is connected!'
-    )
+    online = discord.Embed(title='KanBot ONLINE',
+                           color=discord.Color.light_embed(),
+                           description=f'{KanBot.user} is connected!')
     await channel.send(embed=online)
+
+
+keep_alive()
 
 KanBot.run(TOKEN)
