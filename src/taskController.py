@@ -15,6 +15,13 @@ def add_task(taskname, description, responsible):
         tasks.insert_one(task)
 
 
+def assign_task(taskname, username):
+    if tasks.find_one({'name': taskname}) == None:
+        raise ValueError(f'This task does not exist!')
+    else:
+        tasks.update_one({"name": taskname}, {"$set": {"responsible": username}})
+
+
 def update_task(taskname, newstatus):
     if tasks.find_one({'name': taskname}) == None:
         raise ValueError(f'This task does not exist!')

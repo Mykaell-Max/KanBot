@@ -1,4 +1,4 @@
-from taskController import add_task, update_task, delete_task, view_all_tasks, view_one_task
+from taskController import add_task, update_task, delete_task, view_all_tasks, view_one_task, assign_task
 from embed import simple_embed, error_embed, advanced_embed, task_embed
 from utils import truncate_name
  
@@ -19,6 +19,21 @@ def setup_commands(bot):
         except Exception as error:
             await ctx.send(embed=error_embed(str(error)))
     
+
+    @bot.command(name='assign')
+    async def assign_task_to_user(ctx, taskname: str = None, username: str = None):
+
+        if taskname is None or username is None:
+            await ctx.send(embed=error_embed('All the fields must be filled!'))
+            return
+
+        try:
+            assign_task(taskname.strip().capitalize(), username.strip())
+
+            await ctx.send(embed=simple_embed("Task assigned!"))
+        
+        except Exception as error:
+            await ctx.send(embed=error_embed(str(error)))
 
     @bot.command(name='update')
     async def update_task_status(ctx, taskname: str = None, status: str = None):
